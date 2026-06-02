@@ -140,7 +140,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            border-radius: 0px;
             background: #25D366;
             opacity: 0.5;
             animation: pulse-ring 2s infinite;
@@ -148,6 +148,66 @@
         @keyframes pulse-ring {
             0% { transform: scale(1); opacity: 0.5; }
             100% { transform: scale(1.6); opacity: 0; }
+        }
+        .floating-actions {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 12px;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @media (min-width: 768px) {
+            .floating-actions {
+                right: 24px;
+                bottom: 24px;
+            }
+        }
+        .floating-actions.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .booking-date-input {
+            position: relative;
+            color: transparent;
+        }
+        .booking-date-input:focus,
+        .booking-date-input:valid {
+            color: #1b1c1c;
+        }
+        .booking-date-input::before {
+            content: attr(placeholder);
+            color: #747878;
+            position: absolute;
+            left: 0;
+            background-color: transparent;
+            pointer-events: none;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+        .booking-date-input:focus::before,
+        .booking-date-input:valid::before,
+        .booking-date-input:active::before {
+            opacity: 0;
+            content: "";
+        }
+        .booking-date-input::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            z-index: 10;
         }
         .gallery-masonry {
             column-count: 1;
@@ -410,7 +470,10 @@
 
 <!-- TopNavBar -->
 <nav class="fixed top-0 w-full z-[100] transition-all duration-700 ease-in-out flex justify-between items-center px-margin-mobile md:px-margin-desktop py-10 max-w-container-max mx-auto text-on-primary" id="top-nav">
-<div class="font-display-lg text-headline-sm tracking-tighter cursor-pointer" onclick="gsap.to(window, {duration: 1.5, scrollTo: 0, ease: 'power4.inOut'})">Lumière Obsidian Tropics</div>
+<div class="font-display-lg text-headline-sm tracking-tighter cursor-pointer" onclick="gsap.to(window, {duration: 1.5, scrollTo: 0, ease: 'power4.inOut'})">
+    <span class="md:hidden">Lumière</span>
+    <span class="hidden md:inline">Lumière Obsidian Tropics</span>
+</div>
 <div class="hidden md:flex gap-12 items-center">
 <a class="font-body-md text-label-caps uppercase tracking-widest hover:text-secondary transition-colors duration-300 link-underline" href="#journey">Journey</a>
 <a class="font-body-md text-label-caps uppercase tracking-widest hover:text-secondary transition-colors duration-300 link-underline" href="#villas">Villas</a>
@@ -428,7 +491,7 @@
 <section class="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black" id="hero">
 <!-- Background Image -->
 <div class="absolute inset-0 w-full h-full overflow-hidden" id="hero-bg-container">
-    <img class="w-full h-full object-cover scale-115 filter contrast-[1.08] saturate-[1.05] brightness-[0.98]" id="hero-bg-image" src="./assets/images/hero-volcanic-dawn.png" alt="Luxury Volcanic Sanctuary at Dawn"/>
+    <img class="w-full h-full object-cover scale-115 filter contrast-[1.08] saturate-[1.05] brightness-[0.98]" id="hero-bg-image" src="./assets/images/hero-volcanic-dawn.webp" alt="Luxury Volcanic Sanctuary at Dawn"/>
 </div>
 <div class="absolute inset-0 bg-black/15 z-[1]"></div>
 <div class="relative z-10 text-center text-on-primary max-w-4xl px-margin-mobile flex flex-col items-center">
@@ -524,7 +587,7 @@
         <!-- Morning Story -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div class="relative h-[550px] w-full overflow-hidden">
-                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-wellness.png" alt="Morning Sunrise Yoga"/>
+                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-wellness.webp" alt="Morning Sunrise Yoga"/>
             </div>
             <div class="space-y-8 lg:pl-12 flex flex-col justify-center">
                 <span class="font-label-caps text-secondary uppercase tracking-[0.4em]">06:00 — Morning</span>
@@ -553,14 +616,14 @@
                 </div>
             </div>
             <div class="relative h-[550px] w-full overflow-hidden order-1 lg:order-2">
-                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-ocean.png" alt="Afternoon Reef Exploration"/>
+                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-ocean.webp" alt="Afternoon Reef Exploration"/>
             </div>
         </div>
 
         <!-- Evening Story -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div class="relative h-[550px] w-full overflow-hidden">
-                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-dining.png" alt="Evening Beach Dining"/>
+                <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-all duration-1000 parallax-bg" src="./assets/images/gallery-dining.webp" alt="Evening Beach Dining"/>
             </div>
             <div class="space-y-8 lg:pl-12 flex flex-col justify-center">
                 <span class="font-label-caps text-secondary uppercase tracking-[0.4em]">20:00 — Evening</span>
@@ -707,7 +770,7 @@
 <span class="font-label-caps text-secondary uppercase tracking-[0.4em] mb-4 block">Immersive</span>
 <h2 class="font-display-lg text-headline-md md:text-display-lg reveal-headline">The Visual Journal</h2>
 </div>
-<div class="flex flex-wrap gap-6 font-label-caps text-[10px] tracking-widest uppercase items-center" id="gallery-filters">
+<div class="flex flex-wrap gap-x-6 gap-y-3 font-label-caps text-[10px] tracking-widest uppercase items-center justify-center md:justify-start" id="gallery-filters">
     <button class="gallery-filter-btn border-b-2 border-primary pb-1 font-bold text-primary active-filter" data-filter="all">All</button>
     <button class="gallery-filter-btn text-on-surface-variant hover:text-primary transition-colors pb-1 border-b-2 border-transparent" data-filter="villas">Villas</button>
     <button class="gallery-filter-btn text-on-surface-variant hover:text-primary transition-colors pb-1 border-b-2 border-transparent" data-filter="dining">Dining</button>
@@ -722,12 +785,12 @@
 <div class="gallery-masonry reveal-on-scroll" id="gallery-grid">
 <!-- Item 0: Villas -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="villas" onclick="openLightbox(0)">
-<img loading="lazy" alt="Villa Exterior" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-villa-ext.png"/>
+<img loading="lazy" alt="Villa Exterior" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-villa-ext.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Oceanfront Villa Exterior</div>
 </div>
 <!-- Item 1: Villas -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="villas" onclick="openLightbox(1)">
-<img loading="lazy" alt="Villa Bedroom" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-villa-bed.png"/>
+<img loading="lazy" alt="Villa Bedroom" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-villa-bed.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Obsidian Villa Bedroom</div>
 </div>
 <!-- Item 2: Villas -->
@@ -742,7 +805,7 @@
 </div>
 <!-- Item 4: Dining -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="dining" onclick="openLightbox(4)">
-<img loading="lazy" alt="Private Beach Dining" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-dining.png"/>
+<img loading="lazy" alt="Private Beach Dining" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-dining.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Secluded Candlelit Beach Dinner</div>
 </div>
 <!-- Item 5: Dining -->
@@ -757,7 +820,7 @@
 </div>
 <!-- Item 7: Wellness -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="wellness" onclick="openLightbox(7)">
-<img loading="lazy" alt="Sunrise Yoga Ritual" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-wellness.png"/>
+<img loading="lazy" alt="Sunrise Yoga Ritual" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-wellness.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Oceanfront Sunrise Yoga</div>
 </div>
 <!-- Item 8: Wellness -->
@@ -767,7 +830,7 @@
 </div>
 <!-- Item 9: Ocean -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="ocean" onclick="openLightbox(9)">
-<img loading="lazy" alt="Coral Snorkeling" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-ocean.png"/>
+<img loading="lazy" alt="Coral Snorkeling" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-ocean.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Coral Reef Snorkeling</div>
 </div>
 <!-- Item 10: Ocean -->
@@ -782,7 +845,7 @@
 </div>
 <!-- Item 12: Yacht -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="yacht" onclick="openLightbox(12)">
-<img loading="lazy" alt="Resort Private Yacht" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-yacht.png"/>
+<img loading="lazy" alt="Resort Private Yacht" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-yacht.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Lumière Private Sailing Yacht</div>
 </div>
 <!-- Item 13: Yacht -->
@@ -797,7 +860,7 @@
 </div>
 <!-- Item 15: Nature -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="nature" onclick="openLightbox(15)">
-<img loading="lazy" alt="Palm Forest" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-nature.png"/>
+<img loading="lazy" alt="Palm Forest" class="w-full transition-all duration-1000 parallax-bg luxury-img" src="./assets/images/gallery-nature.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Prehistoric Palm Forest Path</div>
 </div>
 <!-- Item 16: Nature -->
@@ -807,7 +870,7 @@
 </div>
 <!-- Item 17: Architecture -->
 <div class="gallery-item group cursor-pointer overflow-hidden img-reveal-wrapper" data-category="architecture" onclick="openLightbox(17)">
-<img loading="lazy" alt="Resort Lobby Entrance" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-arch.png"/>
+<img loading="lazy" alt="Resort Lobby Entrance" class="w-full transition-all duration-1000 scale-105 group-hover:scale-100 parallax-bg luxury-img" src="./assets/images/gallery-arch.webp"/>
 <div class="mt-4 font-display-lg italic text-base text-on-surface/80 group-hover:text-secondary transition-colors duration-300">Minimalist Resort Lobby Walkway</div>
 </div>
 <!-- Item 18: Architecture -->
@@ -855,7 +918,7 @@
     <!-- 1. Sunrise Yoga -->
     <div class="group flex flex-col justify-between reveal-on-scroll">
         <div class="h-[400px] w-full overflow-hidden relative mb-8">
-            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-wellness.png" alt="Sunrise Yoga"/>
+            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-wellness.webp" alt="Sunrise Yoga"/>
         </div>
         <div class="space-y-4">
             <div class="flex justify-between items-center text-[10px] font-label-caps text-secondary-fixed tracking-widest uppercase">
@@ -869,7 +932,7 @@
     <!-- 2. Private Yacht Expedition -->
     <div class="group flex flex-col justify-between reveal-on-scroll">
         <div class="h-[400px] w-full overflow-hidden relative mb-8">
-            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-yacht.png" alt="Private Yacht Expedition"/>
+            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-yacht.webp" alt="Private Yacht Expedition"/>
         </div>
         <div class="space-y-4">
             <div class="flex justify-between items-center text-[10px] font-label-caps text-secondary-fixed tracking-widest uppercase">
@@ -883,7 +946,7 @@
     <!-- 3. Coral Discovery -->
     <div class="group flex flex-col justify-between reveal-on-scroll">
         <div class="h-[400px] w-full overflow-hidden relative mb-8">
-            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-ocean.png" alt="Coral Reef Discovery"/>
+            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-ocean.webp" alt="Coral Reef Discovery"/>
         </div>
         <div class="space-y-4">
             <div class="flex justify-between items-center text-[10px] font-label-caps text-secondary-fixed tracking-widest uppercase">
@@ -911,7 +974,7 @@
     <!-- 5. Beach Dining -->
     <div class="group flex flex-col justify-between reveal-on-scroll mt-8 lg:mt-0">
         <div class="h-[400px] w-full overflow-hidden relative mb-8">
-            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-dining.png" alt="Beach Dining"/>
+            <img loading="lazy" class="w-full h-full object-cover filter contrast-[1.08] saturate-[1.05] brightness-[0.98] transition-transform duration-[2s] group-hover:scale-105" src="./assets/images/gallery-dining.webp" alt="Beach Dining"/>
         </div>
         <div class="space-y-4">
             <div class="flex justify-between items-center text-[10px] font-label-caps text-secondary-fixed tracking-widest uppercase">
@@ -1371,38 +1434,38 @@
             <span class="font-display-lg text-lg text-primary tracking-tight hidden lg:block">Lumière</span>
             <span class="font-label-caps text-[10px] text-secondary uppercase tracking-[0.3em] hidden sm:block">Reserve Sanctuary</span>
         </div>
-        <div class="flex flex-wrap items-center gap-4 w-full md:w-auto justify-end">
-            <div class="flex items-center gap-2 border-b border-primary/20 py-2 px-3">
-                <span class="material-symbols-outlined text-xs text-secondary">calendar_today</span>
-                <input type="text" placeholder="Arrival Date" onfocus="(this.type='date')" class="bg-transparent text-xs font-body-md outline-none text-primary border-none p-0 w-24 md:w-28 focus:ring-0">
+        <div class="grid grid-cols-2 gap-3 w-full md:flex md:w-auto md:items-center md:gap-4 md:justify-end justify-items-stretch">
+            <div class="flex items-center gap-2 border-b border-primary/20 py-2 px-3 w-full md:w-36 relative">
+                <span class="material-symbols-outlined text-xs text-secondary pointer-events-none">calendar_today</span>
+                <input type="date" placeholder="Arrival Date" class="bg-transparent text-xs font-body-md outline-none text-primary border-none p-0 w-full focus:ring-0 booking-date-input" required>
             </div>
-            <div class="flex items-center gap-2 border-b border-primary/20 py-2 px-3">
-                <span class="material-symbols-outlined text-xs text-secondary">calendar_today</span>
-                <input type="text" placeholder="Departure" onfocus="(this.type='date')" class="bg-transparent text-xs font-body-md outline-none text-primary border-none p-0 w-24 md:w-28 focus:ring-0">
+            <div class="flex items-center gap-2 border-b border-primary/20 py-2 px-3 w-full md:w-36 relative">
+                <span class="material-symbols-outlined text-xs text-secondary pointer-events-none">calendar_today</span>
+                <input type="date" placeholder="Departure" class="bg-transparent text-xs font-body-md outline-none text-primary border-none p-0 w-full focus:ring-0 booking-date-input" required>
             </div>
-            <select class="bg-transparent border-b border-primary/20 text-xs font-body-md py-2 px-3 focus:ring-0 text-primary outline-none select-none">
+            <select class="bg-transparent border-b border-primary/20 text-xs font-body-md py-2 px-3 focus:ring-0 text-primary outline-none select-none w-full md:w-48 col-span-2 md:col-span-1">
                 <option>Ocean Obsidian Villa</option>
                 <option>Sky Sanctuary Suite</option>
                 <option>Royal Reef Estate</option>
             </select>
-            <button class="bg-primary text-on-primary px-8 py-3.5 text-xs font-label-caps uppercase tracking-widest hover:bg-secondary transition-all duration-300 magnetic-btn" onclick="document.querySelector('#reserve').scrollIntoView({behavior: 'smooth'})">Book</button>
-            <button onclick="toggleBookingBar()" class="text-on-surface-variant hover:text-primary transition-colors ml-2"><span class="material-symbols-outlined text-lg">close</span></button>
+            <button class="bg-primary text-on-primary px-8 py-3.5 text-xs font-label-caps uppercase tracking-widest hover:bg-secondary transition-all duration-300 magnetic-btn w-full md:w-auto col-span-2 md:col-span-1" onclick="document.querySelector('#reserve').scrollIntoView({behavior: 'smooth'})">Book</button>
+            <button onclick="toggleBookingBar()" class="text-on-surface-variant hover:text-primary transition-colors absolute top-4 right-4 md:relative md:top-0 md:right-0 md:ml-2"><span class="material-symbols-outlined text-lg">close</span></button>
         </div>
     </div>
 </div>
 
-<!-- Floating Action Stack -->
-<div id="floating-actions-stack" class="fixed bottom-8 right-8 z-[90] flex flex-col items-center gap-4 md:gap-6 pointer-events-none opacity-0">
-    <!-- Scroll To Top -->
-    <button id="scroll-to-top" class="w-12 h-12 md:w-16 md:h-16 bg-white text-primary shadow-xl hover:bg-primary hover:text-on-primary transition-all duration-300 border border-primary/10 flex items-center justify-center pointer-events-auto opacity-0 translate-y-10 rounded-none focus:outline-none" aria-label="Scroll to top">
+<!-- Floating Action Buttons Stack -->
+<div id="floating-actions-container" class="floating-actions">
+    <!-- Scroll To Top (top-most in stacking order) -->
+    <button id="scroll-to-top" class="w-12 h-12 md:w-16 md:h-16 bg-white text-primary shadow-xl hover:bg-primary hover:text-on-primary transition-all duration-300 border border-primary/10 flex items-center justify-center rounded-none focus:outline-none pointer-events-auto" aria-label="Scroll to top" style="display: none;">
         <span class="material-symbols-outlined text-xl md:text-2xl">arrow_upward</span>
     </button>
-    <!-- WhatsApp Concierge -->
-    <a href="https://wa.me/1234567890" target="_blank" class="w-12 h-12 md:w-16 md:h-16 bg-[#25D366] text-white shadow-xl hover:scale-105 active:scale-95 transition-all whatsapp-pulse flex items-center justify-center pointer-events-auto rounded-none relative" aria-label="WhatsApp Concierge">
+    <!-- WhatsApp Concierge (middle in stacking order, with square pulse) -->
+    <a href="https://wa.me/1234567890" target="_blank" class="w-12 h-12 md:w-16 md:h-16 bg-[#25D366] text-white shadow-xl hover:scale-105 active:scale-95 transition-all whatsapp-pulse flex items-center justify-center rounded-none relative pointer-events-auto" aria-label="WhatsApp Concierge">
         <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.628 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
     </a>
-    <!-- Reserve CTA -->
-    <button id="floating-reserve-btn" class="w-12 h-12 md:w-16 md:h-16 bg-secondary text-on-secondary shadow-xl flex flex-col items-center justify-center font-label-caps text-[8px] md:text-[9px] tracking-[0.15em] md:tracking-[0.2em] uppercase hover:bg-primary hover:text-on-primary transition-all duration-300 pointer-events-auto opacity-0 translate-y-10 rounded-none focus:outline-none" aria-label="Reserve Now">
+    <!-- Reserve CTA (bottom-most in stacking order) -->
+    <button id="floating-reserve-btn" class="w-12 h-12 md:w-16 md:h-16 bg-secondary text-on-secondary shadow-xl flex flex-col items-center justify-center font-label-caps text-[8px] md:text-[9px] tracking-[0.15em] md:tracking-[0.2em] uppercase hover:bg-primary hover:text-on-primary transition-all duration-300 pointer-events-none opacity-0 border border-secondary-fixed/10 hover:scale-105 focus:outline-none rounded-none" aria-label="Reserve Now" style="display: none;">
         <span class="material-symbols-outlined text-base md:text-lg mb-0.5 md:mb-1">calendar_month</span>
         <span class="leading-none hidden md:block">Reserve</span>
     </button>
@@ -1509,6 +1572,7 @@
         }
     });
 
+    let floatingActionsStackActivated = false;
     // Scroll listener for legacy actions
     window.addEventListener('scroll', () => {
         const scrolled = window.scrollY;
@@ -1525,18 +1589,15 @@
             nav.classList.remove('text-primary');
         }
 
-        // Scroll to Top visibility
-        const stt = document.getElementById('scroll-to-top');
-        if (scrolled > 800) {
-            stt.classList.remove('opacity-0', 'translate-y-10');
-            stt.classList.add('opacity-100', 'translate-y-0');
-        } else {
-            stt.classList.add('opacity-0', 'translate-y-10');
-            stt.classList.remove('opacity-100', 'translate-y-0');
+        // Activate Floating Actions Stack after 100px scroll
+        if (!floatingActionsStackActivated && scrolled > 100) {
+            floatingActionsStackActivated = true;
+            const container = document.getElementById('floating-actions-container');
+            if (container) {
+                container.classList.add('visible');
+            }
         }
     });
-
-    document.getElementById('scroll-to-top').onclick = () => lenis.scrollTo(0, { duration: 1.5 });
 
     // 6. Image & Video Parallax
     document.querySelectorAll('.parallax-bg').forEach(bg => {
@@ -1911,56 +1972,54 @@
         if (bookingBar) bookingBar.classList.remove('active');
     };
 
-    // 14b. Dynamically Inject Floating Reservation CTA Badge (Gold & Sharp corners)
-    const floatingBtn = document.createElement('button');
-    floatingBtn.id = 'floating-reserve-btn';
-    floatingBtn.className = 'fixed bottom-8 right-8 z-[85] bg-secondary text-on-secondary w-12 h-12 md:w-16 md:h-16 rounded-none shadow-xl flex flex-col items-center justify-center font-label-caps text-[8px] md:text-[9px] tracking-[0.15em] md:tracking-[0.2em] uppercase hover:bg-primary hover:text-on-primary transition-all duration-300 pointer-events-none opacity-0 translate-y-10 border border-secondary-fixed/10 hover:scale-105 focus:outline-none';
-    floatingBtn.setAttribute('aria-label', 'Reserve Now');
-    floatingBtn.innerHTML = `
-        <span class="material-symbols-outlined text-base md:text-lg mb-0.5 md:mb-1">calendar_month</span>
-        <span class="leading-none hidden md:block">Reserve</span>
-    `;
-    floatingBtn.onclick = () => lenis.scrollTo('#reserve', { duration: 1.5 });
-    document.body.appendChild(floatingBtn);
+    // 14b. Get Floating Reservation CTA Badge, bind click, and manage ScrollTrigger visibility
+    const floatingBtn = document.getElementById('floating-reserve-btn');
+    if (floatingBtn) {
+        floatingBtn.onclick = () => lenis.scrollTo('#reserve', { duration: 1.5 });
+        
+        ScrollTrigger.create({
+            trigger: 'body',
+            start: 'top -30%',
+            onEnter: () => {
+                floatingBtn.classList.remove('pointer-events-none');
+                gsap.to(floatingBtn, { opacity: 1, y: 0, display: 'flex', duration: 0.4, ease: 'power2.out' });
+            },
+            onLeaveBack: () => {
+                floatingBtn.classList.add('pointer-events-none');
+                gsap.to(floatingBtn, { opacity: 0, y: 10, display: 'none', duration: 0.4, ease: 'power2.in' });
+            }
+        });
 
-    // Adjust existing floating actions to stack perfectly on bottom-right
-    const waBtn = document.querySelector('.whatsapp-pulse');
-    if (waBtn) {
-        waBtn.classList.remove('bottom-8');
-        waBtn.classList.add('bottom-24', 'md:bottom-28');
+        ScrollTrigger.create({
+            trigger: '#reserve',
+            start: 'top 80%',
+            onEnter: () => {
+                floatingBtn.classList.add('pointer-events-none');
+                gsap.to(floatingBtn, { opacity: 0, y: 10, display: 'none', duration: 0.3, ease: 'power2.in' });
+            },
+            onLeaveBack: () => {
+                floatingBtn.classList.remove('pointer-events-none');
+                gsap.to(floatingBtn, { opacity: 1, y: 0, display: 'flex', duration: 0.4, ease: 'power2.out' });
+            }
+        });
     }
+
+    // 14c. Manage Scroll To Top Visibility via ScrollTrigger
     const stt = document.getElementById('scroll-to-top');
     if (stt) {
-        stt.classList.remove('bottom-32', 'rounded-full');
-        stt.classList.add('bottom-40', 'md:bottom-48', 'rounded-none');
+        stt.onclick = () => lenis.scrollTo(0, { duration: 1.5 });
+
+        ScrollTrigger.create({
+            trigger: 'body',
+            start: '800 top',
+            onEnter: () => {
+                gsap.to(stt, { opacity: 1, y: 0, display: 'flex', duration: 0.4, ease: 'power2.out' });
+            },
+            onLeaveBack: () => {
+                gsap.to(stt, { opacity: 0, y: 10, display: 'none', duration: 0.4, ease: 'power2.in' });
+            }
+        });
     }
-
-    // ScrollTrigger to manage Floating Reservation CTA visibility
-    ScrollTrigger.create({
-        trigger: 'body',
-        start: 'top -30%',
-        onEnter: () => {
-            floatingBtn.classList.remove('pointer-events-none');
-            gsap.to(floatingBtn, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
-        },
-        onLeaveBack: () => {
-            floatingBtn.classList.add('pointer-events-none');
-            gsap.to(floatingBtn, { opacity: 0, y: 10, duration: 0.4, ease: 'power2.in' });
-        }
-    });
-
-    ScrollTrigger.create({
-        trigger: '#reserve',
-        start: 'top 80%',
-        onEnter: () => {
-            floatingBtn.classList.add('pointer-events-none');
-            gsap.to(floatingBtn, { opacity: 0, y: 10, duration: 0.3, ease: 'power2.in' });
-        },
-        onLeaveBack: () => {
-            floatingBtn.classList.remove('pointer-events-none');
-            gsap.to(floatingBtn, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
-        }
-    });
 
     // 15. Magnetic CTA Buttons Animation
     const magneticBtns = document.querySelectorAll('.magnetic-btn');
