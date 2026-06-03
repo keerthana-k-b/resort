@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Lumière Obsidian Tropics | Luxury Resort Sanctuary</title>
+<link rel="preload" as="image" href="./assets/images/villa-01.webp"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -175,6 +176,12 @@
         .booking-date-input {
             position: relative;
             color: transparent;
+            padding-left: 4px;
+            padding-right: 4px;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .booking-date-input:focus,
         .booking-date-input:valid {
@@ -184,11 +191,14 @@
             content: attr(placeholder);
             color: #747878;
             position: absolute;
-            left: 0;
+            left: 4px;
             background-color: transparent;
             pointer-events: none;
-            width: 100%;
+            width: calc(100% - 8px);
             transition: opacity 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .booking-date-input:focus::before,
         .booking-date-input:valid::before,
@@ -636,7 +646,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> 
     </div>
 </section>
 <!-- Advanced Villa Storytelling (Scroll Sequence Simulation) -->
@@ -649,9 +659,9 @@
 <!-- Villa Interactive Sequence 1 -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-section-gap" id="villa-pin-trigger">
 <div class="lg:col-span-7 relative h-[600px] group overflow-hidden shadow-2xl img-reveal-wrapper" id="villa-seq-1">
-<img loading="lazy" alt="Ocean Obsidian Villa" class="villa-frame absolute inset-0 w-full h-full object-cover active opacity-100" src="./assets/images/villa-01.webp"/>
-<img loading="lazy" alt="Sky Sanctuary Suite" class="villa-frame absolute inset-0 w-full h-full object-cover opacity-0" src="./assets/images/villa-02.webp"/>
-<img loading="lazy" alt="Royal Reef Estate" class="villa-frame absolute inset-0 w-full h-full object-cover opacity-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFXaGd5vl8D2ZuiMCNbJ3ThQWDHbCrnXclnHHvpDP-Jtgrt0kHEfetFGvrgH5uw5qs8PHxEf5pczbW7Tb_9jmGTdo3uQ_Pgxh4xPZVLz1PyBf3RniX9yokCEPaHv3Q4mHghMz91hXk-j3qBLCyeqFW5DYbuZeEUd97zUXZEr5UCPCI83fwmekxeYVGVw-6Q0EAi3EnyQUdGY45-_HwAZGtiHhKkRr8luBuvpa5AirmEGh6koKUERJuBCD1l2LxV6wmasw_w6Uj5JA"/>
+<img alt="Ocean Obsidian Villa" class="villa-frame absolute inset-0 w-full h-full object-cover active opacity-100" decoding="async" src="./assets/images/villa-01.webp"/>
+<img loading="lazy" alt="Sky Sanctuary Suite" class="villa-frame absolute inset-0 w-full h-full object-cover opacity-0" decoding="async" src="./assets/images/villa-02.webp"/>
+<img loading="lazy" alt="Royal Reef Estate" class="villa-frame absolute inset-0 w-full h-full object-cover opacity-0" decoding="async" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFXaGd5vl8D2ZuiMCNbJ3ThQWDHbCrnXclnHHvpDP-Jtgrt0kHEfetFGvrgH5uw5qs8PHxEf5pczbW7Tb_9jmGTdo3uQ_Pgxh4xPZVLz1PyBf3RniX9yokCEPaHv3Q4mHghMz91hXk-j3qBLCyeqFW5DYbuZeEUd97zUXZEr5UCPCI83fwmekxeYVGVw-6Q0EAi3EnyQUdGY45-_HwAZGtiHhKkRr8luBuvpa5AirmEGh6koKUERJuBCD1l2LxV6wmasw_w6Uj5JA"/>
 <div class="absolute bottom-10 left-10 flex gap-4 z-20">
 <button class="w-3 h-3 rounded-full bg-white transition-all" onclick="changeVillaFrame('villa-seq-1', 0)"></button>
 <button class="w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all" onclick="changeVillaFrame('villa-seq-1', 1)"></button>
@@ -1673,7 +1683,7 @@
                  .to(frames[2], { scale: 1.08, duration: 1.5, ease: 'none' }, "scene3");
     }
 
-    // 10. Villa Storytelling Pinning Sequence
+    // 10. Villa Storytelling - Native Scrolling with Slideshow and Dots
     const villaPinTrigger = document.getElementById('villa-pin-trigger');
     if (villaPinTrigger) {
         const frames = document.querySelectorAll('.villa-frame');
@@ -1690,52 +1700,76 @@
             gsap.set(textPanels[i], { opacity: 0, y: 20 });
         }
         
-        const villaTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: '#villas',
-                pin: true,
-                start: 'top top',
-                end: '+=200%',
-                scrub: 1,
-                id: 'villas-pin',
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                    const step = Math.min(Math.floor(progress * 3), 2);
-                    dots.forEach((dot, i) => {
-                        dot.classList.toggle('bg-white', i === step);
-                        dot.classList.toggle('bg-white/40', i !== step);
-                    });
-                }
-            }
-        });
-        
-        // Step 0 -> Step 1 (0% to 50% scroll)
-        villaTl.to(frames[0], { scale: 1.1, duration: 1 })
-               .to(frames[0], { opacity: 0, duration: 0.5 }, "step1")
-               .to(textPanels[0], { opacity: 0, y: -20, duration: 0.5 }, "step1")
-               .to(frames[1], { opacity: 1, duration: 0.5 }, "step1")
-               .to(textPanels[1], { opacity: 1, y: 0, duration: 0.5 }, "step1")
-               
-               // Step 1 -> Step 2 (50% to 100% scroll)
-               .to(frames[1], { scale: 1.1, duration: 1 })
-               .to(frames[1], { opacity: 0, duration: 0.5 }, "step2")
-               .to(textPanels[1], { opacity: 0, y: -20, duration: 0.5 }, "step2")
-               .to(frames[2], { opacity: 1, duration: 0.5 }, "step2")
-               .to(textPanels[2], { opacity: 1, y: 0, duration: 0.5 }, "step2")
-               
-               // Zoom final frame
-               .to(frames[2], { scale: 1.1, duration: 1 });
-    }
+        let currentVillaIndex = 0;
+        let villaTimer = null;
 
-    window.changeVillaFrame = function(id, index) {
-        const trigger = ScrollTrigger.getById('villas-pin');
-        if (trigger) {
-            const start = trigger.start;
-            const end = trigger.end;
-            const targetScroll = start + (index / 2) * (end - start);
-            lenis.scrollTo(targetScroll, { duration: 1 });
+        function transitionToVilla(nextIndex) {
+            if (nextIndex === currentVillaIndex) return;
+            const prevIndex = currentVillaIndex;
+            currentVillaIndex = nextIndex;
+
+            // Update dots active states
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('bg-white', i === nextIndex);
+                dot.classList.toggle('bg-white/40', i !== nextIndex);
+            });
+
+            // Transition text accessibility
+            textPanels[prevIndex].classList.add('pointer-events-none');
+            textPanels[nextIndex].classList.remove('pointer-events-none');
+
+            // Outgoing transitions
+            gsap.to(frames[prevIndex], { opacity: 0, scale: 1.05, duration: 0.6, ease: 'power2.inOut' });
+            gsap.to(textPanels[prevIndex], { opacity: 0, y: -20, duration: 0.6, ease: 'power2.inOut' });
+
+            // Incoming transitions
+            gsap.fromTo(frames[nextIndex], 
+                { opacity: 0, scale: 1.05 }, 
+                { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.inOut' }
+            );
+            gsap.fromTo(textPanels[nextIndex], 
+                { opacity: 0, y: 20 }, 
+                { opacity: 1, y: 0, duration: 0.6, ease: 'power2.inOut' }
+            );
         }
-    };
+
+        function startVillaTimer() {
+            if (villaTimer) clearInterval(villaTimer);
+            villaTimer = setInterval(() => {
+                const nextIndex = (currentVillaIndex + 1) % frames.length;
+                transitionToVilla(nextIndex);
+            }, 4000);
+        }
+
+        function stopVillaTimer() {
+            if (villaTimer) {
+                clearInterval(villaTimer);
+                villaTimer = null;
+            }
+        }
+
+        function resetVillaTimer() {
+            stopVillaTimer();
+            startVillaTimer();
+        }
+
+        window.changeVillaFrame = function(id, index) {
+            transitionToVilla(index);
+            resetVillaTimer();
+        };
+
+        // ScrollTrigger to play/pause the slideshow based on viewport presence
+        ScrollTrigger.create({
+            trigger: '#villas',
+            start: 'top 80%',
+            end: 'bottom 20%',
+            onEnter: startVillaTimer,
+            onLeave: stopVillaTimer,
+            onEnterBack: startVillaTimer,
+            onLeaveBack: stopVillaTimer,
+            id: 'villas-pin'
+        });
+    }
 
 
 
