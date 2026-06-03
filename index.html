@@ -434,6 +434,9 @@
             transform: translateY(calc(100% + 20px));
             transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
         #floating-booking-bar.active {
             transform: translateY(0);
@@ -1583,12 +1586,6 @@
         touchMultiplier: 2,
         infinite: false,
     });
-
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
     // Sync ScrollTrigger with Lenis
     lenis.on('scroll', ScrollTrigger.update);
