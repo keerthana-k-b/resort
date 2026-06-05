@@ -427,6 +427,7 @@
         }
 
         /* 8. Floating Booking Bar */
+        /* 8. Floating Booking Bar */
         #floating-booking-bar {
             position: fixed;
             bottom: 32px; /* Shifted 12px upward from 20px */
@@ -435,18 +436,15 @@
             background-color: #fbf9f8;
             border-top: 1px solid rgba(0, 0, 0, 0.08);
             z-index: 80;
-            opacity: 0; /* Hidden by default on page load */
-            visibility: hidden; /* Hidden by default on page load */
-            pointer-events: none; /* Ignore interactions when hidden */
-            transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth fade transitions */
+            transform: translateY(calc(100% + 32px)); /* Hidden off-screen bottom by default */
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1); /* Smooth original slide-up transition */
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+            will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
         }
         #floating-booking-bar.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
+            transform: translateY(0); /* Smooth slide up to visible position */
         }
 
         /* 9. Interactive Map details card */
@@ -527,6 +525,10 @@
         #scroll-to-top:hover {
             color: #6c5e06 !important;
         }
+        /* Navbar Smooth Scroll Optimization */
+        #top-nav {
+            transition: background-color 0.5s ease-in-out, padding 0.5s ease-in-out, box-shadow 0.5s ease-in-out, color 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed overflow-x-hidden">
@@ -573,7 +575,7 @@
 </div>
 
 <!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-[100] transition-all duration-700 ease-in-out flex justify-between items-center px-margin-mobile md:px-margin-desktop py-10 max-w-container-max mx-auto text-on-primary" id="top-nav">
+<nav class="fixed top-0 w-full z-[100] flex justify-between items-center px-margin-mobile md:px-margin-desktop py-10 max-w-container-max mx-auto text-on-primary" id="top-nav">
 <div class="font-display-lg text-headline-sm tracking-tighter cursor-pointer" onclick="gsap.to(window, {duration: 1.5, scrollTo: 0, ease: 'power4.inOut'})">
     <span class="md:hidden">Lumière</span>
     <span class="hidden md:inline">Lumière Obsidian Tropics</span>
@@ -1645,16 +1647,12 @@
 
     // 2. Hero Animations & Ken Burns initialization
     function triggerHeroAnimations() {
-        gsap.to('#top-nav', { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' });
         gsap.fromTo('#hero-bg-image', 
             { scale: 1.15 }, 
             { scale: 1.0, duration: 15, ease: 'sine.inOut', repeat: -1, yoyo: true }
         );
     }
     window.addEventListener('DOMContentLoaded', triggerHeroAnimations);
-
-    // Initialize nav starting opacity
-    gsap.set('#top-nav', { opacity: 0, y: -20 });
 
 
 
@@ -1671,31 +1669,47 @@
     });
 
     let floatingActionsStackActivated = false;
-    // Scroll listener for legacy actions
-    window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY;
-        
-        // Nav Scrolled styling
-        const nav = document.getElementById('top-nav');
-        if (scrolled > 150) {
-            nav.classList.add('nav-scrolled');
-            nav.classList.remove('text-on-primary');
-            nav.classList.add('text-primary');
-        } else {
-            nav.classList.remove('nav-scrolled');
-            nav.classList.add('text-on-primary');
-            nav.classList.remove('text-primary');
-        }
+    // Cached DOM nodes for optimized scroll listener performance
+    const nav = document.getElementById('top-nav');
+    const container = document.getElementById('floating-actions-container');
+    let scrollTicking = false;
 
-        // Activate Floating Actions Stack after 100px scroll
-        if (!floatingActionsStackActivated && scrolled > 100) {
-            floatingActionsStackActivated = true;
-            const container = document.getElementById('floating-actions-container');
-            if (container) {
-                container.classList.add('visible');
-            }
+    // Optimized scroll listener with rAF throttle and passive event listener to eliminate lag
+    window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+            window.requestAnimationFrame(() => {
+                const scrolled = window.scrollY;
+                
+                // Nav Scrolled styling
+                if (nav) {
+                    if (scrolled > 150) {
+                        if (!nav.classList.contains('nav-scrolled')) {
+                            nav.classList.add('nav-scrolled');
+                            nav.classList.remove('text-on-primary');
+                            nav.classList.add('text-primary');
+                        }
+                    } else {
+                        if (nav.classList.contains('nav-scrolled')) {
+                            nav.classList.remove('nav-scrolled');
+                            nav.classList.add('text-on-primary');
+                            nav.classList.remove('text-primary');
+                        }
+                    }
+                }
+
+                // Activate Floating Actions Stack after 100px scroll
+                if (!floatingActionsStackActivated && scrolled > 100) {
+                    floatingActionsStackActivated = true;
+                    if (container) {
+                        container.classList.add('visible');
+                    }
+                }
+                
+                scrollTicking = false;
+            });
+            scrollTicking = true;
         }
-    });
+    }, { passive: true });
 
     // 6. Image & Video Parallax
     document.querySelectorAll('.parallax-bg').forEach(bg => {
@@ -2057,7 +2071,7 @@
         });
     });
 
-    // 14. Floating Booking Bar Control (ScrollTrigger fires once to show the bar and then stops)
+    // 14. Floating Booking Bar Control (ScrollTrigger shows when outside hero, hides when in hero)
     const bookingBar = document.getElementById('floating-booking-bar');
     let bookingBarClosedByUser = false;
 
@@ -2065,11 +2079,13 @@
         ScrollTrigger.create({
             trigger: '#hero',
             start: 'bottom 10%',
-            once: true,
             onEnter: () => {
                 if (!bookingBarClosedByUser) {
                     bookingBar.classList.add('active');
                 }
+            },
+            onLeaveBack: () => {
+                bookingBar.classList.remove('active');
             }
         });
     }
