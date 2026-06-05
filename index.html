@@ -4,6 +4,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Lumière Obsidian Tropics | Luxury Resort Sanctuary</title>
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+<link rel="shortcut icon" href="./assets/favicon/favicon.ico">
 <link rel="preload" as="image" href="./assets/images/hero-volcanic-dawn.webp"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500&amp;display=swap" rel="stylesheet"/>
@@ -164,7 +168,7 @@
         .floating-actions {
             position: fixed;
             right: 16px;
-            bottom: 36px;
+            bottom: 48px; /* Shifted 12px upward from 36px */
             display: flex;
             flex-direction: column-reverse;
             gap: 16px;
@@ -189,7 +193,7 @@
             }
             .floating-actions {
                 right: 24px;
-                bottom: 44px;
+                bottom: 56px; /* Shifted 12px upward from 44px */
                 gap: 20px;
             }
         }
@@ -425,21 +429,24 @@
         /* 8. Floating Booking Bar */
         #floating-booking-bar {
             position: fixed;
-            bottom: 20px;
+            bottom: 32px; /* Shifted 12px upward from 20px */
             left: 0;
             right: 0;
             background-color: #fbf9f8;
             border-top: 1px solid rgba(0, 0, 0, 0.08);
             z-index: 80;
-            transform: translateY(calc(100% + 20px));
-            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0; /* Hidden by default on page load */
+            visibility: hidden; /* Hidden by default on page load */
+            pointer-events: none; /* Ignore interactions when hidden */
+            transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth fade transitions */
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
-            will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
         }
         #floating-booking-bar.active {
-            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         /* 9. Interactive Map details card */
@@ -479,18 +486,46 @@
             filter: url(#mist-filter);
         }
         /* Footer Text Contrast Overrides */
+        footer h5 {
+            color: #ffffff !important;
+        }
         footer {
-            color: rgba(255, 255, 255, 0.72);
+            color: rgba(255, 255, 255, 0.88);
         }
         footer p,
         footer li {
-            color: rgba(255, 255, 255, 0.78);
+            color: rgba(255, 255, 255, 0.88);
         }
         footer a {
-            color: rgba(255, 255, 255, 0.88);
+            color: rgba(255, 255, 255, 0.95);
         }
         footer a:hover {
             color: #ffffff;
+        }
+        /* Improve readability by overriding opacity classes inside footer */
+        footer .opacity-70,
+        footer .opacity-60 {
+            opacity: 1.0;
+        }
+        footer .opacity-30 {
+            opacity: 1.0;
+        }
+        footer .text-on-primary-container\/40 {
+            color: rgba(255, 255, 255, 0.70);
+        }
+        /* Style the copyright text specifically */
+        footer .pt-10 p {
+            color: rgba(255, 255, 255, 0.70) !important;
+        }
+
+        /* Scroll To Top Contrast & Shadow Fix */
+        #scroll-to-top {
+            color: #1b1c1c;
+            z-index: 9999;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+        }
+        #scroll-to-top:hover {
+            color: #6c5e06 !important;
         }
     </style>
 </head>
@@ -2022,31 +2057,16 @@
         });
     });
 
-    // 14. Floating Booking Bar Scroll Trigger
+    // 14. Floating Booking Bar Control (ScrollTrigger fires once to show the bar and then stops)
     const bookingBar = document.getElementById('floating-booking-bar');
     let bookingBarClosedByUser = false;
 
     if (bookingBar) {
         ScrollTrigger.create({
-            trigger: 'body',
-            start: 'top -30%',
+            trigger: '#hero',
+            start: 'bottom 10%',
+            once: true,
             onEnter: () => {
-                if (!bookingBarClosedByUser && !ScrollTrigger.isInViewport(document.getElementById('reserve'))) {
-                    bookingBar.classList.add('active');
-                }
-            },
-            onLeaveBack: () => {
-                bookingBar.classList.remove('active');
-            }
-        });
-
-        ScrollTrigger.create({
-            trigger: '#reserve',
-            start: 'top 80%',
-            onEnter: () => {
-                bookingBar.classList.remove('active');
-            },
-            onLeaveBack: () => {
                 if (!bookingBarClosedByUser) {
                     bookingBar.classList.add('active');
                 }
