@@ -2071,7 +2071,7 @@
         });
     });
 
-    // 14. Floating Booking Bar Control (ScrollTrigger shows when outside hero, hides when in hero)
+    // 14. Floating Booking Bar Control (ScrollTrigger shows when outside hero and before footer, hides in hero/footer)
     const bookingBar = document.getElementById('floating-booking-bar');
     let bookingBarClosedByUser = false;
 
@@ -2079,13 +2079,16 @@
         ScrollTrigger.create({
             trigger: '#hero',
             start: 'bottom 10%',
-            onEnter: () => {
-                if (!bookingBarClosedByUser) {
-                    bookingBar.classList.add('active');
+            endTrigger: 'footer',
+            end: 'top 100%',
+            onToggle: self => {
+                if (self.isActive) {
+                    if (!bookingBarClosedByUser) {
+                        bookingBar.classList.add('active');
+                    }
+                } else {
+                    bookingBar.classList.remove('active');
                 }
-            },
-            onLeaveBack: () => {
-                bookingBar.classList.remove('active');
             }
         });
     }
